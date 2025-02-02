@@ -109,7 +109,7 @@ public class Exchange {
 			//If the quanity of the unfulfilled order in the outcome is not zero
 			if (oOutcome.getUnfulfilledOrder().getQuantity() > 0) {
 				//Not the entire order was fulfilled, add the unfulfilled order to the bid half-book 
-				book.getAsks().addOrder((Ask) oOutcome.getUnfulfilledOrder());
+				book.getBids().addOrder((Bid)o);
 			}
 		} else { //order is an ask
 			//Go to the bids half-book and see if there are matching bids (buying offers) and process them
@@ -117,7 +117,7 @@ public class Exchange {
 			//If the quanity of the unfulfilled order in the outcome is not zero
 			if (oOutcome.getUnfulfilledOrder().getQuantity() > 0) {
 				// Not the entire order was fulfilled, add it to the bid half-book
-				book.getBids().addOrder((Bid) oOutcome.getUnfulfilledOrder());
+				book.getAsks().addOrder((Ask)o);
 			}			
 		}
 
@@ -134,7 +134,7 @@ public class Exchange {
 			//Update balances for Buyer
 			
 			//Get the fee that they buyer is supposed to pay
-			accounts.getTraderAccount(t.getBuyer()).getFee(t);
+			t.setBuyerFee(accounts.getTraderAccount(t.getBuyer()).getFee(t));
 			//Apply the above fee to the account balance of the buyer 			
 			accounts.getTraderAccount(t.getBuyer()).applyFee(t);
 			//Apply the trade payment to the account balance of the buyer (they spent money)
@@ -145,7 +145,7 @@ public class Exchange {
 			//Update balances for Seller
 			
 			//Get the fee that the seller is supposed to pay
-			accounts.getTraderAccount(t.getSeller()).getFee(t);
+			t.setSellerFee(accounts.getTraderAccount(t.getSeller()).getFee(t));
 			//Apply the above fee to the account balance of the seller
 			accounts.getTraderAccount(t.getSeller()).applyFee(t);
 			//Apply the trade payment to the account balance of the seller (they earned money)
